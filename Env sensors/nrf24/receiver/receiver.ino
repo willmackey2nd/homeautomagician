@@ -31,9 +31,10 @@
 
 #define INTSENSUPDINTERVAL 600000 // Internal sensor update interval (ms)
 RF24 radio(D2, D8); // CE, CSN
-uint8_t addresses[][6] = {"1GW01", "2GW01", "3GW01", "4GW01", "5GW01", "6GW01",}; // syntax xGWyy x = sensor number yy = gateway
+uint8_t addresses[][6] = {"1GW01", "2GW01", "3GW01", "4GW01", "5GW01", "6GW01",}; // syntax xGWyy x = sensor number yy = gateway (nf24 only supports 6 clients)
+char address[6];
 
-const char* NodeName = "sensorgw1";
+char* NodeName = "sensorgwx";
 const char* ssid = WIFI_SSID;
 const char* password =  WIFI_PASS;
 const char* mqttServer = MQTT_SERVER_IP;
@@ -44,7 +45,7 @@ PubSubClient client(espClient);
 DHT dht(DHTPIN, DHTTYPE);
 
 struct sensorpacket {
-  char id[8] = "SGW0001";
+  char id[8] = "self"; //"SGW0001";
   /* Payload type
      0 = unknown/error
      1 = temperature (C * 10)
@@ -52,6 +53,7 @@ struct sensorpacket {
      3 = pressure (hPa)
      4 = voltage (V)
      5 = luminance (lux)
+     6 = waterlevel (%)
   */
   int8_t packetnr = 0; // running packet number
   int8_t type = 0;
@@ -69,11 +71,12 @@ void setup() {
   Serial.begin(115200);    // Debugging only
 #endif
   delay(500);
-  char address[6];
+
 
 
   //nRF24 addresses to listen
   for (int i = 1; i <= sizeof(addresses) / sizeof(addresses[0]); i++) {
+    sprintf(NodeName, "sensorgw%d", i, GATEWAYNR); // 'sensorgwYY
     sprintf(address, "%dGW0%d", i, GATEWAYNR); // syntax xGWyy x = sensor number yy = gateway
     memcpy(addresses[i], address, sizeof(addresses[i]));
     PRINT("nRF24 sensor address ");
@@ -131,19 +134,19 @@ void setup() {
   //client.setCallback(callback);
 
   radio.begin();
-  
+
   radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_250KBPS );
   // Open all 6 pipes for listening
   for (uint8_t i = 0; i <= 5; i++) {
-    radio.openReadingPipe(i, addresses[i]);  
+    radio.openReadingPipe(i, addresses[i]);
   }
-//  radio.openReadingPipe(0, addresses[0]);    
-//  radio.openReadingPipe(1, addresses[1]);  
-//  radio.openReadingPipe(2, addresses[2]); 
-//  radio.openReadingPipe(3, addresses[3]); 
-//  radio.openReadingPipe(4, addresses[4]); 
-//  radio.openReadingPipe(5, addresses[5]); 
+  //  radio.openReadingPipe(0, addresses[0]);
+  //  radio.openReadingPipe(1, addresses[1]);
+  //  radio.openReadingPipe(2, addresses[2]);
+  //  radio.openReadingPipe(3, addresses[3]);
+  //  radio.openReadingPipe(4, addresses[4]);
+  //  radio.openReadingPipe(5, addresses[5]);
   radio.startListening();
 
   PRINTL("init done");
@@ -174,11 +177,11 @@ void loop() {
   byte pipeNum = 0; //variable to hold which reading pipe sent data
   if (radio.available(&pipeNum)) {
     /* We can ignore the pipe of received packet as the packet
-     * contains sensor ID that's used to transfer data
-     * under correct MQTT topic
-     */
+       contains sensor ID that's used to transfer data
+       under correct MQTT topic
+    */
 
-  //   PRINTL("received shit");
+    //   PRINTL("received shit");
     radio.read(&buf, sizeof(sensorpacket));
 
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
@@ -274,6 +277,10 @@ void GetMqttTopic(char* topicbuf, const char* nodeName, int8_t sensorType, char*
       strcpy(sensorTypeStr, "luminance");
       break;
 
+    case 6:
+      strcpy(sensorTypeStr, "waterlevel/perc");
+      break;
+
     default:
       strcpy(sensorTypeStr, "unknown");
   }
@@ -316,6 +323,10 @@ void FormatPayload(char* payloadbuf, int8_t sensorType, int16_t rawPayload) {
       break;
 
     case 5: // Luminance
+      sprintf(payloadbuf, "%d", rawPayload);
+      break;
+
+    case 6: // Water level percentage
       sprintf(payloadbuf, "%d", rawPayload);
       break;
 

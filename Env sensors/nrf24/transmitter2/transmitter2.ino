@@ -10,7 +10,7 @@
 
 /////// NODE SPECIFIC!!!!! ////////////////////////////
 #define GATEWAYNR 1 // Nr of the gateway to connect to
-#define SENSORNR 3 // Nr of this sensor node
+#define SENSORNR 4 // Nr of this sensor node
 #define TEMPSENTYPE BMP280 // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
 #define OTHERSENTYPE 0 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
 ///////////////////////////////////////////////////////
@@ -65,6 +65,8 @@ Adafruit_BMP280 bme; // I2C
 #define SENDINTERVAL 20 // interval between sending shit
 uint16_t timepassed = 99999; // seconds since last send
 
+
+
 struct sensorpacket {
   char id[8] = "THS00YY";
   /* Payload type
@@ -81,18 +83,17 @@ struct sensorpacket {
   int16_t payload = 0;
 } sensorpacket1;
 
-
+long voltage = 0;
+float waterlevelperc = 0;
 struct trh {
   float rh = 0;
   float temp = 0;
   float pressure = 0;
 } trh1;
 
-// Water level
-const int wlHigh = 257;
-const int wlLow = 595;
 
-long voltage = 0;
+
+
 
 long millisp;
 
@@ -163,11 +164,11 @@ void InitNRF24() {
 void loop()
 {
   updateValues();
-   
+
   InitNRF24();
-   
+
   sendValues();
- 
+
   sendcount++;
 
   sleep();
@@ -199,9 +200,11 @@ void updateValues() {
 
 
   switch (OTHERSENTYPE) {
-    case 6: // CAPACITIVE WATER LEVEL 
+    case 6: // CAPACITIVE WATER LEVEL
       ReadCapWH();
-    case default:
+      break;
+
+  case default:
       break;
   }
 }
@@ -249,7 +252,7 @@ void readBME280(trh &_trh) {
   _trh.pressure = bme.readPressure() / 100.0F;
   PRINT("Pressure: ");
   PRINTL(_trh.pressure);
- 
+
   digitalWrite(TMPPWRPIN, LOW);
 }
 
@@ -270,6 +273,24 @@ long readVcc() {
 }
 
 
+// Water level
+const int wlHigh = 257;
+const int wlLow = 595;
+
+void ReadCapWH() {
+   digitalWrite(TMPPWRPIN, HIGH);
+  delay(1000); 
+  int raw = analogRead(WLEVELPIN);
+  
+  float waterlevelperc = 100 * ((float)(raw - wlLow) / (float)(wlHigh - wlLow));
+  waterlevelperc = constrain(wlp, 0, 100);
+  PRINT("Water level %: ");
+  PRINTL(wlp);
+ 
+   digitalWrite(TMPPWRPIN, LOW);
+}
+
+
 void sendValues() {
   PRINTL("Sending data");
 
@@ -278,15 +299,9 @@ void sendValues() {
   sensorpacket1.payload = (int)voltage;
   sendpacket();
 
-  bool send_temp, send_rh, send_pressure;
-  send_temp = true;
-  send_rh = TEMPSENTYPE == 1 || TEMPSENTYPE == 2;
-  send_pressure = TEMPSENTYPE == 2 || TEMPSENTYPE == 3;
-
-
   // Temperature
   sensorpacket1.type = 1;
-  if (send_temp) {
+  if (TEMPSENTYPE != 0) {
     if (isnan(trh1.temp)) {
       PRINTL("temp error");
       sensorpacket1.payload = -2000;
@@ -298,7 +313,7 @@ void sendValues() {
 
 
   // Humidity
-  if (send_rh) {
+  if (TEMPSENTYPE == 1 || TEMPSENTYPE == 2) {
     sensorpacket1.type = 2;
     if (isnan(trh1.rh)) {
       PRINTL("rh error");
@@ -311,7 +326,7 @@ void sendValues() {
 
 
   // Pressure
-  if (send_pressure) {
+  if (TEMPSENTYPE == 2 || TEMPSENTYPE == 3) {
     sensorpacket1.type = 3;
     if (isnan(trh1.pressure)) {
       PRINTL("rh error");
@@ -319,6 +334,13 @@ void sendValues() {
     } else {
       sensorpacket1.payload = (int)(trh1.pressure);
     }
+    sendpacket();
+  }
+
+  // Water level
+  if (OTHERSENTYPE == 6) {
+    sensorpacket1.type = 6;
+    sensorpacket1.payload = (int)waterlevelperc;
     sendpacket();
   }
 }
@@ -335,7 +357,7 @@ void sleep() {
 
   // Disable I2C to prevent current leak
   shutdownI2C();
-  
+
   // nRF24 sleep
   radio.powerDown();
 
