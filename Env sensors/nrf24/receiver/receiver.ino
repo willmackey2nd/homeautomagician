@@ -34,7 +34,7 @@ RF24 radio(D2, D8); // CE, CSN
 uint8_t addresses[][6] = {"1GW01", "2GW01", "3GW01", "4GW01", "5GW01", "6GW01",}; // syntax xGWyy x = sensor number yy = gateway (nf24 only supports 6 clients)
 char address[6];
 
-char* NodeName = "sensorgwx";
+char* NodeName = "sensorgwyy";
 const char* ssid = WIFI_SSID;
 const char* password =  WIFI_PASS;
 const char* mqttServer = MQTT_SERVER_IP;
@@ -73,10 +73,11 @@ void setup() {
   delay(500);
 
 
-
+  // Node name
+  sprintf(NodeName, "sensorgw%d", GATEWAYNR); // 'sensorgwYY
+  
   //nRF24 addresses to listen
   for (int i = 1; i <= sizeof(addresses) / sizeof(addresses[0]); i++) {
-    sprintf(NodeName, "sensorgw%d", i, GATEWAYNR); // 'sensorgwYY
     sprintf(address, "%dGW0%d", i, GATEWAYNR); // syntax xGWyy x = sensor number yy = gateway
     memcpy(addresses[i], address, sizeof(addresses[i]));
     PRINT("nRF24 sensor address ");
