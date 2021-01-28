@@ -11,8 +11,9 @@
 /////// NODE SPECIFIC!!!!! ////////////////////////////
 #define GATEWAYNR 1 // Nr of the gateway to connect to
 #define SENSORNR 4 // Nr of this sensor node
-#define TEMPSENTYPE BMP280 // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
-#define OTHERSENTYPE 0 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
+#define TEMPSENTYPE 0 // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
+#define OTHERSENTYPE 6 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
+#define UPDATE_INTERVAL 150 // Update interval. value = seconds / 8. Example: 10 minutes = 600 s / 8 s = 75
 ///////////////////////////////////////////////////////
 
 #define DHT22 1
@@ -50,7 +51,9 @@
 #define NF24_PWR_PIN 8
 #define NF24_CE_PIN 9
 #define NF24_CSN_PIN 10
-
+// MOSI 11
+// MISO 12
+// SCK  13
 
 RF24 radio(NF24_CE_PIN, NF24_CSN_PIN); // CE, CSN
 uint8_t address[6] = "xGWyy"; // x = sensor number, yy = gateway number
@@ -113,7 +116,7 @@ void setup()
   digitalWrite(TMPPWRPIN, HIGH);
   digitalWrite(NF24_PWR_PIN, HIGH);
   digitalWrite(LED_BUILTIN, HIGH);
-
+  
 #ifdef DEBUG
   Serial.begin(9600);	  // Debugging only
 #endif
@@ -185,6 +188,8 @@ void updateValues() {
   voltage = readVcc();
 
   switch (TEMPSENTYPE) {
+    case 0:
+      break;
     case 1: // DHT
       readDHT(trh1);
       break;
@@ -200,11 +205,14 @@ void updateValues() {
 
 
   switch (OTHERSENTYPE) {
+    case 1:
+      break;
     case 6: // CAPACITIVE WATER LEVEL
       ReadCapWH();
       break;
 
-  case default:
+   default:
+      ;
       break;
   }
 }
@@ -273,21 +281,21 @@ long readVcc() {
 }
 
 
-// Water level
-const int wlHigh = 257;
-const int wlLow = 595;
+// Water level (3.3v reference)
+const int wlHigh = 376;
+const int wlLow = 876;
 
 void ReadCapWH() {
-   digitalWrite(TMPPWRPIN, HIGH);
-  delay(1000); 
+  digitalWrite(TMPPWRPIN, HIGH);
+  delay(200);
   int raw = analogRead(WLEVELPIN);
-  
-  float waterlevelperc = 100 * ((float)(raw - wlLow) / (float)(wlHigh - wlLow));
-  waterlevelperc = constrain(wlp, 0, 100);
+
+  waterlevelperc = 100 * ((float)(raw - wlLow) / (float)(wlHigh - wlLow));
+  waterlevelperc = constrain(waterlevelperc, 0, 100);
   PRINT("Water level %: ");
-  PRINTL(wlp);
- 
-   digitalWrite(TMPPWRPIN, LOW);
+  PRINTL(waterlevelperc);
+
+  digitalWrite(TMPPWRPIN, LOW);
 }
 
 
@@ -340,7 +348,8 @@ void sendValues() {
   // Water level
   if (OTHERSENTYPE == 6) {
     sensorpacket1.type = 6;
-    sensorpacket1.payload = (int)waterlevelperc;
+    sensorpacket1.payload = (int)round(waterlevelperc);
+    PRINTL( sensorpacket1.payload);
     sendpacket();
   }
 }
