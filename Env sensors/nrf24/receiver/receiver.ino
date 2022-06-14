@@ -69,7 +69,7 @@ void setup() {
   Serial.begin(115200);    // Debugging only
 #endif
   delay(500);
-  char address[6];
+  char address[6]; // Address is 40 bit long but here we have room for null termination (which should be ignored by the rf24 lib)
 
 
   //nRF24 addresses to listen

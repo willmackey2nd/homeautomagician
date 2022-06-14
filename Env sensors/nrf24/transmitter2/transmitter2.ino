@@ -53,7 +53,7 @@
 
 
 RF24 radio(NF24_CE_PIN, NF24_CSN_PIN); // CE, CSN
-uint8_t address[6] = "xGWyy"; // x = sensor number, yy = gateway number
+uint8_t address[6] = "xGWyy"; // x = sensor number, yy = gateway number // Address is 40 bit long but here we have room for null termination (which should be ignored by the rf24 lib)
 DHT dht(DHTPIN, DHTTYPE);
 
 #if TEMPSENTYPE == BME280
