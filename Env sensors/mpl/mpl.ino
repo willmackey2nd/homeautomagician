@@ -1,6 +1,4 @@
 #include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "DHT.h" // Modified lines 155, 156 and 160 !!!
