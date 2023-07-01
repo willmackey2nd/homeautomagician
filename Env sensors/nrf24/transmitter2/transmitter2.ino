@@ -10,9 +10,9 @@
 
 /////// NODE SPECIFIC!!!!! ////////////////////////////
 #define GATEWAYNR 1 // Nr of the gateway to connect to
-#define SENSORNR 4 // Nr of this sensor node
-#define TEMPSENTYPE 0 // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
-#define OTHERSENTYPE 6 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
+#define SENSORNR 1 // Nr of this sensor node
+#define TEMPSENTYPE 3 // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
+#define OTHERSENTYPE 0 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
 #define UPDATE_INTERVAL 150 // Update interval. value = seconds / 8. Example: 10 minutes = 600 s / 8 s = 75
 ///////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@
 #define BMP280 3
 
 // Debug print
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 #define PRINT(x)  Serial.print (x)
@@ -43,7 +43,7 @@
 #define WLEVELPIN A0  // Water level sensor analog input
 #define TMPSDA A4     // SDA
 #define TMPSCL A5     // SCL
-#define TMPPWRPIN 6     // what digital pin the DHT22 is conected to
+#define TMPPWRPIN 6     // Temperature sensor power supply pin
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 
@@ -195,6 +195,8 @@ void updateValues() {
       break;
 
     case 2: // BME280
+      readBME280(trh1);
+      break;
     case 3: // BMP280
       readBME280(trh1);
       break;

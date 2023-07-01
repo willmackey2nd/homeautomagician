@@ -1,0 +1,6 @@
+{
+    "configuration": "cpu=8MHzatmega328",
+    "board": "ownboards:avr:pro",
+    "port": "COM4",
+    "sketch": "transmitter2.ino"
+}
