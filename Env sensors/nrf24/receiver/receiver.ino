@@ -402,7 +402,7 @@ void reconnect() {
   while (!client.connected()) {
     PRINT("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect(NodeName)) {
+    if (client.connect(NodeName, MQTT_USR, MQTT_PW)) {
       PRINTL("connected");
       sprintf(tmpstring, "devices/%s/status", NodeName);
 

@@ -38,6 +38,17 @@ OneWire oneWire(ONE_WIRE_BUS_PIN);
 // Pass oneWire reference to DallasTemperature library
 DallasTemperature tempSensors(&oneWire);
 
+uint8_t sensors[8][8] = { 0x28, 0x62, 0x1B, 0x8C, 0x35, 0x20, 0x01, 0x00, // 1
+                          0x28, 0xF0, 0x77, 0xC3, 0x34, 0x20, 0x01, 0x3E, // 2
+                          0x28, 0x54, 0xD5, 0x84, 0x35, 0x20, 0x01, 0xC3, // 3
+                          0x28, 0x56, 0x49, 0xC7, 0x34, 0x20, 0x01, 0xF8, // 4
+                          0x28, 0xA7, 0xAE, 0x75, 0x35, 0x20, 0x01, 0x0B, // 5
+                          0x28, 0xE5, 0xC1, 0x64, 0x35, 0x20, 0x01, 0xD9, // 6
+                          0x28, 0x26, 0x50, 0x8B, 0x35, 0x20, 0x01, 0xB6, // 7
+                          0x28, 0x80, 0x3D, 0x74, 0x35, 0x20, 0x01, 0x4E  // 8
+                          };
+
+
 struct sensorpacket {
   char id[8] = "self"; //"SGW0001";
   /* Payload type
@@ -151,14 +162,15 @@ void internalSensors() {
 
   // Display temperature from each sensor
   float temp;
-  for (uint8_t i = 0;  i < deviceCount;  i++)
+  for (uint8_t i = 0;  i < 8;  i++)
   {
     sprintf(intsens.id, "t%d", i);
     //strcpy(intsens.id, sensorID);
     //String("self").toCharArray(intsens.id, 8);
 
     // Temperature
-    temp = tempSensors.getTempCByIndex(i);
+    //temp = tempSensors.getTempCByIndex(i);
+    temp = tempSensors.getTempC(sensors[i]);
     if (isnan(temp)) {
       PRINTL("temp error");
       intsens.payload = -2000;
