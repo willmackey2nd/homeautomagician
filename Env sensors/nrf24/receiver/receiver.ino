@@ -140,6 +140,7 @@ void setup() {
 
   radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_250KBPS );
+  radio.setPayloadSize(12);
   // Open all 6 pipes for listening
   for (uint8_t i = 0; i <= 5; i++) {
     radio.openReadingPipe(i, addresses[i]);
