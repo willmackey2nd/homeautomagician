@@ -1,5 +1,5 @@
 /////// NODE SPECIFIC!!!!! ///////
-#define GATEWAYNR 1    // Nr of this gateway
+#define GATEWAYNR 2    // Nr of this gateway
 #define TEMPSENTYPE 2  // 0 = NONE, 1 = DHT22, 2 = BME280, 3 = BMP280
 #define OTHERSENTYPE 0 // 0 = NONE, 6 = CAPACITIVE WATER LEVEL
 
@@ -12,12 +12,26 @@
 #include "DHT.h" // Modified lines 155, 156 and 160 !!!
 #endif
 
+/*
+Wifi config must include:
+#define WIFI_PASS "password"
+#define WIFI_SSID "ssid"
+#define MQTT_SERVER_IP "123.123.123.123"
+#define MQTT_SERVER_PORT 1883
+#define MQTT_USR "home assistant mqtt user name"
+#define MQTT_PW "home assistant mqtt user password"
+*/
 #include "wificonfig.h"
+
+
 // #include <OneWire.h>
 // #include <DallasTemperature.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 #include <Adafruit_BME280.h>
+
+#define INTSENSUPDINTERVAL 600000 // Internal sensor update interval (ms)
+#define WIFI_SLEEP_DELAY 2000     // Delay after publishing to set wifi asleep (ms)
 
 // Debug prints
 #define DEBUG
@@ -61,7 +75,7 @@ Adafruit_BMP280 bme; // I2C
 DHT dht(DHTPIN, DHTTYPE);
 #endif
 
-#define INTSENSUPDINTERVAL 600000      // Internal sensor update interval (ms)
+
 RF24 radio(NF24_CE_PIN, NF24_CSN_PIN); // CE, CSN
 uint8_t nrf24Addresses[][6] = {
     "1GW01",
@@ -110,11 +124,52 @@ struct sensorpacket
 char tmpstring[50];
 char tmpstring2[50];
 long prevUpdMillis = -INTSENSUPDINTERVAL;
+long prevWSDMillis = -WIFI_SLEEP_DELAY;
+
+
+// Wifi connection handler
+void wifiConnect(char *NodeName, const char *ssid, const char *password)
+{
+  PRINTL();
+  PRINT(NodeName);
+  PRINT(" connecting to ");
+  PRINTL(ssid);
+
+  WiFi.hostname(NodeName);
+  
+  WiFi.mode(WIFI_STA); // Set to station mode to enable modem sleep
+  WiFi.begin(ssid, password);
+
+  int retrycnt = 0;
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    retrycnt += 1;
+
+    if (retrycnt > 50)
+    {
+      PRINTL("WiFi connection timeout, restart ESP..");
+      ESP.restart();
+    }
+    PRINT(".");
+  }
+
+  PRINTL("");
+  PRINTL("WiFi connected");
+  PRINTL("IP address: ");
+  PRINTL(WiFi.localIP());
+
+  wifi_set_sleep_type(NONE_SLEEP_T);
+}
+
+void vprint(String msg){
+  PRINTL(msg);
+}
+
 
 ///////////////////////////////////////////////////
 // Setup
 ///////////////////////////////////////////////////
-
 void setup()
 {
 
@@ -122,6 +177,8 @@ void setup()
   Serial.begin(115200); // Debugging only
 #endif
   delay(500);
+
+  vprint("Var print test " + String(NodeName) + '\t' + String(GATEWAYNR));
 
   // Node name
   sprintf(NodeName, "sensorgw%d", GATEWAYNR); // 'sensorgwYY
@@ -155,40 +212,12 @@ void setup()
     PRINT("configured 433 packet size: ");
     PRINTL(sizeof(sensorpacket));
 
-    // WiFi
-
-    // We start by connecting to a WiFi network
-    PRINTL();
-    PRINT(NodeName);
-    PRINT(" connecting to ");
-    PRINTL(ssid);
-
-    WiFi.hostname(NodeName);
-    WiFi.begin(ssid, password);
-
-    int retrycnt = 0;
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(500);
-      retrycnt += 1;
-
-      if (retrycnt > 50)
-      {
-        PRINTL("WiFi connection timeout, restart ESP..");
-        ESP.restart();
-      }
-      PRINT(".");
-    }
-
-    PRINTL("");
-    PRINTL("WiFi connected");
-    PRINTL("IP address: ");
-    PRINTL(WiFi.localIP());
-
+    // WiFi 
+    wifiConnect(NodeName, ssid, password);
+    
+    // MQTT
     client.setServer(mqttServer, mqttPort);
     // client.setCallback(callback);
-
-    
 
     // NRF24
     radio.begin();
@@ -207,20 +236,20 @@ void setup()
     
 }
 
+bool wifiSleeping = false;
+
 void loop()
 {
-  // WiFi connection
-  if (!client.connected())
-  {
-    reconnect();
-  }
+  // MQTT loop
   client.loop();
 
   // Internal sensors
   if (abs((long)millis() - prevUpdMillis) > INTSENSUPDINTERVAL)
   {
+    wifiWake();
     internalSensors();
     prevUpdMillis = millis();
+    prevWSDMillis = millis();
   }
 
   uint8_t buf[sizeof(sensorpacket)];
@@ -228,6 +257,7 @@ void loop()
   byte pipeNum = 0; // variable to hold which reading pipe sent data
   if (radio.available(&pipeNum))
   {
+    wifiWake();
     /* We can ignore the pipe of received packet as the packet
        contains sensor ID that's used to transfer data
        under correct MQTT topic
@@ -243,8 +273,90 @@ void loop()
     struct sensorpacket sensorx;
     memcpy(&sensorx, buf, sizeof(sensorpacket));
     Mqttpub(NodeName, sensorx.id, sensorx.type, sensorx.payload);
+
+    prevWSDMillis = millis();
+  } 
+  
+
+  // Set wifi asleep to reduce heat (affacts temp sensor) 
+  if (!wifiSleeping && abs((long)millis() - prevWSDMillis) > WIFI_SLEEP_DELAY)
+  {
+    wifiSleep();
+    prevWSDMillis = millis();
   }
 }
+
+void wifiWake() {
+  if (!wifiSleeping) {
+    return;
+  }
+  
+
+  PRINTL("Wake up wifi");
+  wifiSleeping = false;
+  wifiConnect(NodeName, ssid, password);
+
+  // MQTT connection
+  if (!client.connected())
+  {
+    mqttReconnect();
+  }
+  
+}
+
+
+void wifiSleep() {
+  if (wifiSleeping) {
+    return;
+  }
+  PRINTL("Set wifi asleep");
+  client.disconnect();
+  client.flush();
+  while( client.state() != -1){  
+    delay(10);
+  }
+
+  wifiSleeping = true;
+}
+
+
+void mqttReconnect()
+{
+  // Loop until we're reconnected
+  while (!client.connected())
+  {
+    PRINT("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect(NodeName, MQTT_USR, MQTT_PW))
+    {
+      PRINTL("connected");
+      sprintf(tmpstring, "devices/%s/status", NodeName);
+
+      client.publish(tmpstring, "connected");
+    }
+    else
+    {
+      PRINT("failed, rc=");
+      PRINT(client.state());
+      PRINTL(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
+
+void blinkLed(int times, int blinkdelay)
+{
+  for (int cnt = times; cnt > 0; cnt--)
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(blinkdelay);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(blinkdelay);
+  }
+}
+
 
 void internalSensors()
 {
@@ -557,38 +669,4 @@ void FormatPayload(char *payloadbuf, int8_t sensorType, int16_t rawPayload)
 //   }
 // }
 
-void reconnect()
-{
-  // Loop until we're reconnected
-  while (!client.connected())
-  {
-    PRINT("Attempting MQTT connection...");
-    // Attempt to connect
-    if (client.connect(NodeName, MQTT_USR, MQTT_PW))
-    {
-      PRINTL("connected");
-      sprintf(tmpstring, "devices/%s/status", NodeName);
 
-      client.publish(tmpstring, "connected");
-    }
-    else
-    {
-      PRINT("failed, rc=");
-      PRINT(client.state());
-      PRINTL(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
-    }
-  }
-}
-
-void blinkLed(int times, int blinkdelay)
-{
-  for (int cnt = times; cnt > 0; cnt--)
-  {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(blinkdelay);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(blinkdelay);
-  }
-}
