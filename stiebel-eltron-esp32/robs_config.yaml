@@ -1,0 +1,812 @@
+captive_portal:
+
+globals:
+  - id: el_aufnahmeleistung_ww_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_tag_kwh
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_tag_kwh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_tag_kwh
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_tag_kwh_flag
+    type: bool
+    restore_value: yes 
+  - id: el_aufnahmeleistung_ww_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_total_mWh
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_ww_total_mWh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_total_mWh
+    type: float
+    restore_value: yes
+  - id: el_aufnahmeleistung_heiz_total_mWh_flag
+    type: bool
+    restore_value: yes
+
+
+  - id: waermemertrag_ww_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_ww_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_ww_tag_kwh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_ww_tag_kwh_flag
+    type: bool
+    
+  - id: waermemertrag_electr_ww_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_ww_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_electr_ww_tag_kwh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_ww_tag_kwh_flag
+    type: bool    
+    restore_value: yes
+
+  - id: waermemertrag_heiz_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_heiz_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_heiz_tag_kwh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_heiz_tag_kwh_flag
+    type: bool
+    restore_value: yes 
+
+  - id: waermemertrag_electr_heiz_tag_wh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_tag_wh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_tag_kwh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_tag_kwh_flag
+    type: bool
+    restore_value: yes 
+
+  - id: waermemertrag_ww_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_ww_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_ww_total_mWh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_ww_total_mWh_flag
+    type: bool
+    restore_value: yes
+
+  - id: waermemertrag_heiz_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_heiz_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_heiz_total_mWh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_heiz_total_mWh_flag
+    type: bool
+    restore_value: yes
+
+  - id: waermemertrag_electr_heiz_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_total_mWh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_heiz_total_mWh_flag
+    type: bool
+    restore_value: yes
+
+  - id: waermemertrag_electr_ww_total_kWh_float
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_ww_total_kWh_flag
+    type: bool
+    restore_value: yes
+  - id: waermemertrag_electr_ww_total_mWh
+    type: float
+    restore_value: yes
+  - id: waermemertrag_electr_ww_total_mWh_flag
+    type: bool
+    restore_value: yes
+
+
+
+
+sensor:
+  - platform: template
+    name: "Außentemperatur"
+    id: temperature_outside
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Quellentemperatur"
+    id: temperature_source
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Warmwassertemperatur"
+    id: temperature_water
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Vorlauftemperatur Heizung"
+    id: temperature_forerun
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-right"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "Heizkreis Vorlauf"
+    id: temperature_forerun_heating
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-right"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+
+  - platform: template
+    name: "Rücklauftemperatur Heizung"
+    id: temperature_return
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-left"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Luftfeuchtigkeit Wohnraum"
+    id: humidity_inside
+    unit_of_measurement: "%rH"
+    icon: "mdi:water-percent"
+    device_class: "humidity"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "Temperatur Wohnraum"
+    id: temperature_inside
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "Stromverbrauch Warmwasser heute"
+    id: daily_electric_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    state_class: "measurement"
+    accuracy_decimals: 3
+    icon: "mdi:transmission-tower"
+  - platform: template
+    name: "Stromverbrauch Heizung heute"
+    id: daily_electric_energy_heating
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    state_class: "measurement"
+    icon: "mdi:transmission-tower"
+    accuracy_decimals: 3   
+  - platform: template
+    name: "Stromverbrauch Warmwasser total"
+    id: total_electric_energy_water
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    state_class: "measurement"
+    icon: "mdi:transmission-tower"
+    accuracy_decimals: 3
+  - platform: template
+    name: "Stromverbrauch Heizung total"
+    id: total_electric_energy_heating
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:transmission-tower"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "WM Heizung heute"
+    id: daily_heating_energy
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+   
+  - platform: template
+    name: "WM Heizen total"
+    id: total_heating_energy
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "WM Warmwasser heute"
+    id: daily_heating_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "WM Warmwasser total"
+    id: total_heating_energy_water
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+    
+  - platform: template
+    name: "WM elektr. Warmwasser total"
+    id: total_electric_heating_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+
+  - platform: template
+    name: "WM elektr. heizen total"
+    id: total_electric_heating_energy
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+
+binary_sensor:
+  - platform: template
+    name: "EVU Sperre"
+    id: "evu_lock"
+
+
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+     
+      - seconds: /180
+        then:
+
+
+#WM NE WW Summe wh  - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x22,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#WM NE WW Summe kwh  - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x23,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+#WM NE Heizen Summe wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x26,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#WM NE Heizen Summe kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x27,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+#WM WW Tag wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2a,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#WM WW Tag kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2b,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#WM WW Summe kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#WM WW Summe Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#WM Heizen Tag wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#WM Heizen Tag kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#WM Heizen Summe kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x30,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#WM Heizen Summe Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x31,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 10s
+
+          - lambda: |-
+              if (id(waermemertrag_electr_ww_total_mWh_flag) and id(waermemertrag_electr_ww_total_kWh_flag)){
+              id(waermemertrag_electr_ww_total_mWh) += id(waermemertrag_electr_ww_total_kWh_float);
+              id(total_electric_heating_energy_water).publish_state(id(waermemertrag_electr_ww_total_mWh));
+              };
+              id(waermemertrag_electr_ww_total_mWh_flag)=false;
+              id(waermemertrag_electr_ww_total_kWh_flag)=false;
+          - lambda: |-
+              if (id(waermemertrag_electr_heiz_total_kWh_flag) and id(waermemertrag_electr_heiz_total_mWh_flag)){
+              id(waermemertrag_electr_heiz_total_mWh) += id(waermemertrag_electr_heiz_total_kWh_float);
+              id(total_electric_heating_energy).publish_state(id(waermemertrag_electr_heiz_total_mWh));
+              };
+              id(waermemertrag_electr_heiz_total_kWh_flag)=false;
+              id(waermemertrag_electr_heiz_total_mWh_flag)=false;       
+
+          - lambda: |-
+              if (id(waermemertrag_ww_total_mWh_flag) and id(waermemertrag_ww_total_kWh_flag)){
+              id(waermemertrag_ww_total_mWh) += id(waermemertrag_ww_total_kWh_float);
+              id(total_heating_energy_water).publish_state(id(waermemertrag_ww_total_mWh));
+              };
+              id(waermemertrag_ww_total_mWh_flag)=false;
+              id(waermemertrag_ww_total_kWh_flag)=false;
+          - lambda: |-
+              if (id(waermemertrag_heiz_total_kWh_flag) and id(waermemertrag_heiz_total_mWh_flag)){
+              id(waermemertrag_heiz_total_mWh) += id(waermemertrag_heiz_total_kWh_float);
+              id(total_heating_energy).publish_state(id(waermemertrag_heiz_total_mWh));
+              };
+              id(waermemertrag_heiz_total_kWh_flag)=false;
+              id(waermemertrag_heiz_total_mWh_flag)=false;       
+          - lambda: |-
+              if (id(waermemertrag_heiz_tag_kwh_flag) and id(waermemertrag_heiz_tag_wh_flag)){
+              id(waermemertrag_heiz_tag_kwh) += id(waermemertrag_heiz_tag_wh_float);
+              id(daily_heating_energy).publish_state(id(waermemertrag_heiz_tag_kwh));
+              };
+              id(waermemertrag_heiz_tag_kwh_flag)=false;
+              id(waermemertrag_heiz_tag_wh_flag)=false;
+          - lambda: |-
+              if (id(waermemertrag_ww_tag_kwh_flag) and id(waermemertrag_ww_tag_wh_flag)){
+              id(waermemertrag_ww_tag_kwh) += id(waermemertrag_ww_tag_wh_float);
+              id(daily_heating_energy_water).publish_state(id(waermemertrag_ww_tag_kwh));
+              };
+              id(waermemertrag_ww_tag_kwh_flag)=false;
+              id(waermemertrag_ww_tag_wh_flag)=false;
+
+
+
+
+
+
+
+
+
+
+#el. Leistungsaufnahme WW Tag Wh -  ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1a,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#el. Leistungsaufnahme WW Tag kWh -  ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1b,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+#el. Leistungsaufnahme WW Summe kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#el. Leistungsaufnahme WW Summe Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+#el. Leistungsaufnahme Heizen Tag Wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#el. Leistungsaufnahme Heizen Tag Wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+#el. Leistungsaufnahme Heizen Summe kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x20,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+#el. Leistungsaufnahme Heizen Summe Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x21,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 10s
+
+          - lambda: |-
+              if (id(el_aufnahmeleistung_ww_total_mWh_flag) and id(el_aufnahmeleistung_ww_total_kWh_flag)){
+              id(el_aufnahmeleistung_ww_total_mWh) += id(el_aufnahmeleistung_ww_total_kWh_float);
+              id(total_electric_energy_water).publish_state(id(el_aufnahmeleistung_ww_total_mWh));
+              };
+              id(el_aufnahmeleistung_ww_total_mWh_flag)=false;
+              id(el_aufnahmeleistung_ww_total_kWh_flag)=false;
+          - lambda: |-
+              if (id(el_aufnahmeleistung_heiz_total_mWh_flag) and id(el_aufnahmeleistung_heiz_total_kWh_flag)){
+              id(el_aufnahmeleistung_heiz_total_mWh) += id(el_aufnahmeleistung_heiz_total_kWh_float);
+              id(total_electric_energy_heating).publish_state(id(el_aufnahmeleistung_heiz_total_mWh));
+              };
+              id(el_aufnahmeleistung_heiz_total_mWh_flag)=false;
+              id(el_aufnahmeleistung_heiz_total_mWh_flag)=false;       
+          - lambda: |-
+              if (id(el_aufnahmeleistung_ww_tag_kwh_flag) and id(el_aufnahmeleistung_ww_tag_wh_flag)){
+              id(el_aufnahmeleistung_ww_tag_kwh) += id(el_aufnahmeleistung_ww_tag_wh_float);
+              id(daily_electric_energy_water).publish_state(id(el_aufnahmeleistung_ww_tag_kwh));
+              };
+              id(el_aufnahmeleistung_ww_tag_kwh_flag)=false;
+              id(el_aufnahmeleistung_ww_tag_wh_flag)=false;
+          - lambda: |-
+              if (id(el_aufnahmeleistung_heiz_tag_kwh_flag) and id(el_aufnahmeleistung_heiz_tag_wh_flag)){
+              id(el_aufnahmeleistung_heiz_tag_kwh) += id(el_aufnahmeleistung_heiz_tag_wh_float);
+              id(daily_electric_energy_heating).publish_state(id(el_aufnahmeleistung_heiz_tag_kwh));
+              };
+              id(el_aufnahmeleistung_heiz_tag_kwh_flag)=false;
+              id(el_aufnahmeleistung_heiz_tag_wh_flag)=false;
+              
+          - lambda: |-
+              ESP_LOGD("main", "EVU Sperre requested");
+
+
+
+#Außentemperatur 1/10 °C et dec value - ok /10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+#Vorlauftemperatur  - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+#Vorlauftemperatur Hzg - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+#Rücklauftemperatur Hzg - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x16,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+#WW Temperatur - ok + offset
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+#Quelle IST: - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x01,0xd4,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+
+
+
+
+       
+spi:
+  id: McpSpi
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  miso_pin: GPIO19
+
+canbus:
+  - platform: mcp2515
+    id: my_mcp2515
+    spi_id: McpSpi
+    cs_pin: GPIO15
+    can_id: 680
+    use_extended_id: false
+    bit_rate: 20kbps
+    on_frame:
+
+
+
+#Warmwasser-Temperaturabfrage + Offset 3.9 °C
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0e) {
+              float temperature =float((float((int((x[6])+( (x[5])<<8))))/10)+3.9);
+              id(temperature_water).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+#Quellen-Temperaturabfrage
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x01 and x[4] == 0xd4) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_source).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+#Vorlauftemperaturabfrage
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0d) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/1000);
+              id(temperature_forerun).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+            
+#Vorlauftemperaturabfrage Heizkreis
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0f) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/1000);
+              id(temperature_forerun_heating).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+#Rücklauftemperaturabfrage
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x16) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_return).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+
+#Außentemperaturabfrage
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0c) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_outside).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+#Luftfeuchtigkeit FEK mitlesen
+    - can_id: 0x301
+      then:
+        - lambda: |-
+            if(x[0]==0xc0 and x[1]==0x01 and x[2]==0x75) {
+              float humidity =float(float((int((x[4])+( (x[3])<<8))))/10);
+              id(humidity_inside).publish_state(humidity);
+              ESP_LOGD("main", "Humidity received over can is %f", humidity);
+            }
+#Raumtemperatur FEK mitlesen
+    - can_id: 0x301
+      then:
+        - lambda: |-
+            if(x[0]==0xc0 and x[1]==0x01 and x[2]==0x11) {
+              float temperature =float(float((int((x[4])+( (x[3])<<8))))/10);
+              id(temperature_inside).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+
+
+#Elektrische Leistungsaufnahme Wh /kWh
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if (x[4]==0x1a){
+                id(el_aufnahmeleistung_ww_tag_wh_float) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(el_aufnahmeleistung_ww_tag_wh_flag)=true;
+                ESP_LOGD("main", "el_aufnahmeleistung_ww_tag_kwh received over can is %f", id(el_aufnahmeleistung_ww_tag_wh_float));}
+              else if (x[4]==0x1e){
+                id(el_aufnahmeleistung_heiz_tag_wh_float) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(el_aufnahmeleistung_heiz_tag_wh_flag) = true;
+                ESP_LOGD("main", "el_aufnahmeleistung_heiz_tag_wh received over can is %f", id(el_aufnahmeleistung_heiz_tag_wh_float));}
+              else if (x[4]==0x1c){
+                id(el_aufnahmeleistung_ww_total_kWh_float) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(el_aufnahmeleistung_ww_total_kWh_flag)=true;
+                ESP_LOGD("main", "el_aufnahmeleistung_ww_total_kkWh received over can is %f", id(el_aufnahmeleistung_ww_total_kWh_float));}
+              else if (x[4]==0x20){
+                id(el_aufnahmeleistung_heiz_total_kWh_float) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(el_aufnahmeleistung_heiz_total_kWh_flag) = true;
+                ESP_LOGD("main", "el_aufnahmeleistung_heiz_total_kWh received over can is %f", id(el_aufnahmeleistung_heiz_total_kWh_float));}
+              }
+              if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x00 and x[4]==0x74){
+              if(x[5]==0x80 and x[6]==0x00){
+                id(evu_lock).publish_state(false);
+                }
+              else{
+                id(evu_lock).publish_state(true);
+              };
+            };
+
+#Elektrische Leistungsaufnahme kWh / MWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x1b){
+              id(el_aufnahmeleistung_ww_tag_kwh) =float(int((x[6])+( (x[5])<<8)));
+              id(el_aufnahmeleistung_ww_tag_kwh_flag)=true;
+              ESP_LOGD("main", "el_aufnahmeleistung_ww_tag_kwh received over can is %f", id(el_aufnahmeleistung_ww_tag_kwh));}
+              else if(x[4]==0x1f){
+                id(el_aufnahmeleistung_heiz_tag_kwh) =float(int((x[6])+( (x[5])<<8)));
+                id(el_aufnahmeleistung_heiz_tag_kwh_flag)=true;
+                ESP_LOGD("main", "el_aufnahmeleistung_heiz_tag_kwh received over can is %f", id(el_aufnahmeleistung_heiz_tag_kwh));}
+              else if(x[4]==0x1d){
+              id(el_aufnahmeleistung_ww_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+              id(el_aufnahmeleistung_ww_total_mWh_flag)=true;
+              ESP_LOGD("main", "el_aufnahmeleistung_ww_total_mWh received over can is %f", id(el_aufnahmeleistung_ww_total_mWh));}
+              else if(x[4]==0x21){
+                id(el_aufnahmeleistung_heiz_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(el_aufnahmeleistung_heiz_total_mWh_flag)=true;
+                ESP_LOGD("main", "el_aufnahmeleistung_heiz_total_mWh received over can is %f", id(el_aufnahmeleistung_heiz_total_mWh));}
+            }
+
+
+#Wärmeertrag WW/Heizung MWh / kWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x23){
+                id(waermemertrag_electr_ww_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(waermemertrag_electr_ww_total_mWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_electr_ww_tag_kwh received over can is %f", id(waermemertrag_electr_ww_total_mWh));}
+              else if(x[4]==0x27){
+                id(waermemertrag_electr_heiz_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(waermemertrag_electr_heiz_total_mWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_electr_heiz_tag_kwh received over can is %f", id(waermemertrag_electr_heiz_total_mWh));}
+              else if(x[4]==0x2b){
+              id(waermemertrag_ww_tag_kwh) =float(int((x[6])+( (x[5])<<8)));
+              id(waermemertrag_ww_tag_kwh_flag)=true;
+              ESP_LOGD("main", "waermemertrag_ww_tag_kwh received over can is %f", id(waermemertrag_ww_tag_kwh));}
+              else if(x[4]==0x2d){
+              id(waermemertrag_ww_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+              id(waermemertrag_ww_total_mWh_flag)=true;
+              ESP_LOGD("main", "waermemertrag_ww_total_mWh received over can is %f", id(waermemertrag_ww_total_mWh));}
+              else if(x[4]==0x2f){
+                id(waermemertrag_heiz_tag_kwh) =float(int((x[6])+( (x[5])<<8)));
+                id(waermemertrag_heiz_tag_kwh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_heiz_tag_kwh received over can is %f", id(waermemertrag_heiz_tag_kwh));}
+              else if(x[4]==0x31){
+                id(waermemertrag_heiz_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(waermemertrag_heiz_total_mWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_heiz_total_kWh_float received over can is %f", id(waermemertrag_heiz_total_mWh));}
+            }
+
+
+#Wärmeertrag WW/Heizung Wh / kWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x22){
+                id(waermemertrag_electr_ww_total_kWh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(waermemertrag_electr_ww_total_kWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_electr_ww_tag_wh_float received over can is %f", id(waermemertrag_electr_ww_total_kWh_float));}
+              else if(x[4]==0x26){
+                id(waermemertrag_electr_heiz_total_kWh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(waermemertrag_electr_heiz_total_kWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_electr_heiz_tag_wh_float received over can is %f", id(waermemertrag_electr_heiz_total_kWh_float));}
+              else if(x[4]==0x2a){
+              id(waermemertrag_ww_tag_wh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+              id(waermemertrag_ww_tag_wh_flag)=true;
+              ESP_LOGD("main", "waermemertrag_ww_tag_wh_float received over can is %f", id(waermemertrag_ww_tag_wh_float));}
+              else if(x[4]==0x2c){
+              id(waermemertrag_ww_total_kWh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+              id(waermemertrag_ww_total_kWh_flag)=true;
+              ESP_LOGD("main", "waermemertrag_ww_total_kWh_float received over can is %f", id(waermemertrag_ww_total_kWh_float));}
+              else if(x[4]==0x2e){
+                id(waermemertrag_heiz_tag_wh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(waermemertrag_heiz_tag_wh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_heiz_tag_wh_float received over can is %f", id(waermemertrag_heiz_tag_wh_float));}
+              else if(x[4]==0x30){
+                id(waermemertrag_heiz_total_kWh_float) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(waermemertrag_heiz_total_kWh_flag)=true;
+                ESP_LOGD("main", "waermemertrag_heiz_total_kWh_float received over can is %f", id(waermemertrag_heiz_total_kWh_float));}
+            }
+
+
+#Show data in raw form as hex-values
+    - can_id: 0x180
+      then:
+        - lambda: |-
+              int wert0 = int(x[0]);
+              int wert1 =int(x[1]);
+              int wert2 =int(x[2]);
+              int wert3 =int(x[3]);
+              int wert4 =int(x[4]);
+              int wert5 =int(x[5]);
+              int wert6 =int(x[6]);
+              float wert7 = float(int((x[6])+( (x[5])<<8)));
+              ESP_LOGD("main", "Antwort von 180 Hex: %x %x %x %x %x %x %x", wert0, wert1, wert2, wert3, wert4, wert5, wert6);
+              ESP_LOGD("main", "Antwort von 180 Float: %f", wert7);
+              ESP_LOGD("main", "Antwort von 180 Dez.: %i %i", wert5, wert6);

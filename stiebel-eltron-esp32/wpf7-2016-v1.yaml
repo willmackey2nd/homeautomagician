@@ -1,0 +1,811 @@
+captive_portal:
+
+
+
+
+# Global variables written when response from pump is received
+globals:
+  - id: power_consumption_hotwater_day_wh
+    type: float
+    restore_value: yes
+  - id: power_consumption_hotwater_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_hotwater_day_kwh
+    type: float
+    restore_value: yes
+  - id: power_consumption_hotwater_day_kwh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_heating_day_wh
+    type: float
+    restore_value: yes
+  - id: power_consumption_heating_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_heating_day_kwh
+    type: float
+    restore_value: yes
+  - id: power_consumption_heating_day_kwh_updated
+    type: bool
+    restore_value: yes 
+  - id: power_consumption_hotwater_total_kWh
+    type: float
+    restore_value: yes
+  - id: power_consumption_hotwater_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_hotwater_total_mWh
+    type: float
+    restore_value: yes
+  - id: power_consumption_hotwater_total_mWh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_heating_total_kWh
+    type: float
+    restore_value: yes
+  - id: power_consumption_heating_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: power_consumption_heating_total_mWh
+    type: float
+    restore_value: yes
+  - id: power_consumption_heating_total_mWh_updated
+    type: bool
+    restore_value: yes
+
+  - id: produced_energy_hotwater_day_wh
+    type: float
+    restore_value: yes
+  - id: produced_energy_hotwater_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_hotwater_day_kwh
+    type: float
+    restore_value: yes
+  - id: produced_energy_hotwater_day_kwh_updated
+    type: bool
+    
+  - id: produced_energy_electr_heater_hotwater_day_wh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_day_kwh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_day_kwh_updated
+    type: bool    
+    restore_value: yes
+
+  - id: produced_energy_heating_day_wh
+    type: float
+    restore_value: yes
+  - id: produced_energy_heating_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_heating_day_kwh
+    type: float
+    restore_value: yes
+  - id: produced_energy_heating_day_kwh_updated
+    type: bool
+    restore_value: yes 
+
+  - id: produced_energy_electr_heater_heating_day_wh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_day_wh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_day_kwh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_day_kwh_updated
+    type: bool
+    restore_value: yes 
+
+  - id: produced_energy_hotwater_total_kWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_hotwater_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_hotwater_total_mWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_hotwater_total_mWh_updated
+    type: bool
+    restore_value: yes
+
+  - id: produced_energy_heating_total_kWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_heating_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_heating_total_mWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_heating_total_mWh_updated
+    type: bool
+    restore_value: yes
+
+  - id: produced_energy_electr_heater_heating_total_kWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_total_mWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_heating_total_mWh_updated
+    type: bool
+    restore_value: yes
+
+  - id: produced_energy_electr_heater_hotwater_total_kWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_total_kWh_updated
+    type: bool
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_total_mWh
+    type: float
+    restore_value: yes
+  - id: produced_energy_electr_heater_hotwater_total_mWh_updated
+    type: bool
+    restore_value: yes
+
+
+sensor:
+  - platform: template
+    name: "Outside temperature"
+    id: temperature_outside
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Source temperature"
+    id: temperature_source
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Hot water temperature"
+    id: temperature_hotwater
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Flow temperature"
+    id: temperature_flow
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-right"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "heatingkreis Vorlauf"
+    id: temperature_flow_heating
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-right"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+
+  - platform: template
+    name: "Return temperature"
+    id: temperature_return
+    unit_of_measurement: "°C"
+    icon: "mdi:waves-arrow-left"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+
+  - platform: template
+    name: "Inside humidity"
+    id: humidity_inside
+    unit_of_measurement: "%rH"
+    icon: "mdi:water-percent"
+    device_class: "humidity"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "Inside temperature"
+    id: temperature_inside
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-lines"
+    device_class: "temperature"
+    state_class: "measurement"
+    accuracy_decimals: 1
+  - platform: template
+    name: "Consumed energy for hot water today"
+    id: daily_electric_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    state_class: "measurement"
+    accuracy_decimals: 3
+    icon: "mdi:transmission-tower"
+  - platform: template
+    name: "Consumed energy for heating today"
+    id: daily_electric_energy_heating
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    state_class: "measurement"
+    icon: "mdi:transmission-tower"
+    accuracy_decimals: 3   
+  - platform: template
+    name: "Consumed energy for hot water total"
+    id: total_electric_energy_water
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    state_class: "measurement"
+    icon: "mdi:transmission-tower"
+    accuracy_decimals: 3
+  - platform: template
+    name: "Consumed energy for heating total"
+    id: total_electric_energy_heating
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:transmission-tower"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "Produced energy for hot water today"
+    id: daily_heating_energy
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+   
+  - platform: template
+    name: "Produced energy for hot water total"
+    id: total_heating_energy
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "Produced energy for heating today"
+    id: daily_heating_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "Procuded energy for heating total"
+    id: total_heating_energy_water
+    unit_of_measurement: "MWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+    
+  - platform: template
+    name: "Hot water electric heating total consumption"
+    id: total_electric_heating_energy_water
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+  - platform: template
+    name: "Heating electric heating total consumption"
+    id: total_electric_heating_energy
+    unit_of_measurement: "kWh"
+    device_class: "energy"
+    icon: "mdi:water-boiler"
+    state_class: "measurement"
+    accuracy_decimals: 3
+
+
+binary_sensor:
+  - platform: template
+    name: "EVU lock"
+    id: "evu_lock"
+
+
+# Request every 2 minutess
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+      - seconds: /180
+        then:
+          # Electric heater Hot water daily wh  - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x22,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Electric heater Hot water daily kwh  - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x23,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Electric heater Heating daily wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x26,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Electric heater Heating daily  kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x27,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Hot water daily wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2a,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Hot water daily kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2b,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Hot waater total kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Hot water total Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Heating daily wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Heating daily kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x2f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Heating total kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x30,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Heating total Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x31,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 10s
+
+#####################################################
+# Aggregate data when heat pump sends updated values
+#####################################################
+
+          # Total produced hot water using electric heaters
+          - lambda: |-
+              if (id(produced_energy_electr_heater_hotwater_total_mWh_updated) and id(produced_energy_electr_heater_hotwater_total_kWh_updated)){
+              id(produced_energy_electr_heater_hotwater_total_mWh) += id(produced_energy_electr_heater_hotwater_total_kWh);
+              id(total_electric_heating_energy_water).publish_state(id(produced_energy_electr_heater_hotwater_total_mWh));
+              };
+              id(produced_energy_electr_heater_hotwater_total_mWh_updated)=false;
+              id(produced_energy_electr_heater_hotwater_total_kWh_updated)=false;
+
+          # Total produced heating using electric heaters
+          - lambda: |-
+              if (id(produced_energy_electr_heater_heating_total_kWh_updated) and id(produced_energy_electr_heater_heating_total_mWh_updated)){
+              id(produced_energy_electr_heater_heating_total_mWh) += id(produced_energy_electr_heater_heating_total_kWh);
+              id(total_electric_heating_energy).publish_state(id(produced_energy_electr_heater_heating_total_mWh));
+              };
+              id(produced_energy_electr_heater_heating_total_kWh_updated)=false;
+              id(produced_energy_electr_heater_heating_total_mWh_updated)=false;       
+
+          # Total produced hot water
+          - lambda: |-
+              if (id(produced_energy_hotwater_total_mWh_updated) and id(produced_energy_hotwater_total_kWh_updated)){
+              id(produced_energy_hotwater_total_mWh) += id(produced_energy_hotwater_total_kWh);
+              id(total_heating_energy_water).publish_state(id(produced_energy_hotwater_total_mWh));
+              };
+              id(produced_energy_hotwater_total_mWh_updated)=false;
+              id(produced_energy_hotwater_total_kWh_updated)=false;
+
+          # Total produced heating
+          - lambda: |-
+              if (id(produced_energy_heating_total_kWh_updated) and id(produced_energy_heating_total_mWh_updated)){
+              id(produced_energy_heating_total_mWh) += id(produced_energy_heating_total_kWh);
+              id(total_heating_energy).publish_state(id(produced_energy_heating_total_mWh));
+              };
+              id(produced_energy_heating_total_kWh_updated)=false;
+              id(produced_energy_heating_total_mWh_updated)=false;       
+
+          # Daily produced heating
+          - lambda: |-
+              if (id(produced_energy_heating_day_kwh_updated) and id(produced_energy_heating_day_wh_updated)){
+              id(produced_energy_heating_day_kwh) += id(produced_energy_heating_day_wh);
+              id(daily_heating_energy).publish_state(id(produced_energy_heating_day_kwh));
+              };
+              id(produced_energy_heating_day_kwh_updated)=false;
+              id(produced_energy_heating_day_wh_updated)=false;
+
+          # Daily produced hot water
+          - lambda: |-
+              if (id(produced_energy_hotwater_day_kwh_updated) and id(produced_energy_hotwater_day_wh_updated)){
+              id(produced_energy_hotwater_day_kwh) += id(produced_energy_hotwater_day_wh);
+              id(daily_heating_energy_water).publish_state(id(produced_energy_hotwater_day_kwh));
+              };
+              id(produced_energy_hotwater_day_kwh_updated)=false;
+              id(produced_energy_hotwater_day_wh_updated)=false;
+
+
+
+          # Consumed energy for hot water daily Wh -  ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1a,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Consumed energy for hot water daily kWh -  ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1b,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Consumed energy for hot water total kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Consumed energy for hot water total Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+          # Consumed energy for heating daily Wh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Consumed energy for heating daily kWh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x1f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+
+          # Consumed energy for heating total kwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x20,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+          # Consumed energy for heating total Mwh - ok
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x09,0x21,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 10s
+
+          - lambda: |-
+              if (id(power_consumption_hotwater_total_mWh_updated) and id(power_consumption_hotwater_total_kWh_updated)){
+              id(power_consumption_hotwater_total_mWh) += id(power_consumption_hotwater_total_kWh);
+              id(total_electric_energy_water).publish_state(id(power_consumption_hotwater_total_mWh));
+              };
+              id(power_consumption_hotwater_total_mWh_updated)=false;
+              id(power_consumption_hotwater_total_kWh_updated)=false;
+          - lambda: |-
+              if (id(power_consumption_heating_total_mWh_updated) and id(power_consumption_heating_total_kWh_updated)){
+              id(power_consumption_heating_total_mWh) += id(power_consumption_heating_total_kWh);
+              id(total_electric_energy_heating).publish_state(id(power_consumption_heating_total_mWh));
+              };
+              id(power_consumption_heating_total_mWh_updated)=false;
+              id(power_consumption_heating_total_mWh_updated)=false;       
+          - lambda: |-
+              if (id(power_consumption_hotwater_day_kwh_updated) and id(power_consumption_hotwater_day_wh_updated)){
+              id(power_consumption_hotwater_day_kwh) += id(power_consumption_hotwater_day_wh);
+              id(daily_electric_energy_water).publish_state(id(power_consumption_hotwater_day_kwh));
+              };
+              id(power_consumption_hotwater_day_kwh_updated)=false;
+              id(power_consumption_hotwater_day_wh_updated)=false;
+          - lambda: |-
+              if (id(power_consumption_heating_day_kwh_updated) and id(power_consumption_heating_day_wh_updated)){
+              id(power_consumption_heating_day_kwh) += id(power_consumption_heating_day_wh);
+              id(daily_electric_energy_heating).publish_state(id(power_consumption_heating_day_kwh));
+              };
+              id(power_consumption_heating_day_kwh_updated)=false;
+              id(power_consumption_heating_day_wh_updated)=false;
+              
+          - lambda: |-
+              ESP_LOGD("main", "EVU Sperre requested");
+
+
+
+          # Outside temperature 1/10 °C et dec value - ok /10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0c,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms
+
+          # Flow tempearuter - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0d,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+          # Flow tempearture after electric heater - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0f,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+          # Return temperature - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x16,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+          # Hot water temperature - ok + offset
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x00,0x0e,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+        # Source temperature  - ok 1/10
+          - canbus.send:
+              data: [ 0x31, 0x00, 0xfa,0x01,0xd4,0x00,0x00 ]
+              can_id: 0x680
+          - delay: 200ms 
+
+
+
+# CAN controller & SPI settings 
+spi:
+  id: McpSpi
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  miso_pin: GPIO19
+
+canbus:
+  - platform: mcp2515
+    id: my_mcp2515
+    spi_id: McpSpi
+    cs_pin: GPIO15
+    can_id: 680
+    use_extended_id: false
+    bit_rate: 20kbps
+    on_frame:
+
+
+    # Hot water temperature + Offset 3.9 °C
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0e) {
+              float temperature =float((float((int((x[6])+( (x[5])<<8))))/10)+3.9);
+              id(temperature_hotwater).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+    # Source temperature
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x01 and x[4] == 0xd4) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_source).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+    # Flow temperature
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0d) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/1000);
+              id(temperature_flow).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+            
+    # Flow temperature heating circuit
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0f) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/1000);
+              id(temperature_flow_heating).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+# Returen temperature
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x16) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_return).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+
+# Outside temperature
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[3]==0x00 and x[4] == 0x0c) {
+              float temperature =float(float((int((x[6])+( (x[5])<<8))))/10);
+              id(temperature_outside).publish_state(temperature);
+              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+            }
+
+#Luftfeuchtigkeit FEK mitlesen
+#    - can_id: 0x301
+#      then:
+#        - lambda: |-
+#            if(x[0]==0xc0 and x[1]==0x01 and x[2]==0x75) {
+#              float humidity =float(float((int((x[4])+( (x[3])<<8))))/10);
+#              id(humidity_inside).publish_state(humidity);
+#              ESP_LOGD("main", "Humidity received over can is %f", humidity);
+#            }
+
+#Raumtemperatur FEK mitlesen
+#    - can_id: 0x301
+#      then:
+#        - lambda: |-
+#            if(x[0]==0xc0 and x[1]==0x01 and x[2]==0x11) {
+#              float temperature =float(float((int((x[4])+( (x[3])<<8))))/10);
+#              id(temperature_inside).publish_state(temperature);
+#              ESP_LOGD("main", "Temperature received over can is %f", temperature);
+#            }
+
+
+
+    # Power consumption Wh /kWh
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if (x[4]==0x1a){
+                id(power_consumption_hotwater_day_wh) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(power_consumption_hotwater_day_wh_updated)=true;
+                ESP_LOGD("main", "power_consumption_hotwater_day_kwh received over can is %f", id(power_consumption_hotwater_day_wh));}
+              else if (x[4]==0x1e){
+                id(power_consumption_heating_day_wh) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(power_consumption_heating_day_wh_updated) = true;
+                ESP_LOGD("main", "power_consumption_heating_day_wh received over can is %f", id(power_consumption_heating_day_wh));}
+              else if (x[4]==0x1c){
+                id(power_consumption_hotwater_total_kWh) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(power_consumption_hotwater_total_kWh_updated)=true;
+                ESP_LOGD("main", "power_consumption_hotwater_total_kkWh received over can is %f", id(power_consumption_hotwater_total_kWh));}
+              else if (x[4]==0x20){
+                id(power_consumption_heating_total_kWh) = (float((int((x[6])+( (x[5])<<8))))/1000);
+                id(power_consumption_heating_total_kWh_updated) = true;
+                ESP_LOGD("main", "power_consumption_heating_total_kWh received over can is %f", id(power_consumption_heating_total_kWh));}
+              }
+              if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x00 and x[4]==0x74){
+              if(x[5]==0x80 and x[6]==0x00){
+                id(evu_lock).publish_state(false);
+                }
+              else{
+                id(evu_lock).publish_state(true);
+              };
+            };
+
+    # Power consumption kWh / MWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x1b){
+              id(power_consumption_hotwater_day_kwh) =float(int((x[6])+( (x[5])<<8)));
+              id(power_consumption_hotwater_day_kwh_updated)=true;
+              ESP_LOGD("main", "power_consumption_hotwater_day_kwh received over can is %f", id(power_consumption_hotwater_day_kwh));}
+              else if(x[4]==0x1f){
+                id(power_consumption_heating_day_kwh) =float(int((x[6])+( (x[5])<<8)));
+                id(power_consumption_heating_day_kwh_updated)=true;
+                ESP_LOGD("main", "power_consumption_heating_day_kwh received over can is %f", id(power_consumption_heating_day_kwh));}
+              else if(x[4]==0x1d){
+              id(power_consumption_hotwater_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+              id(power_consumption_hotwater_total_mWh_updated)=true;
+              ESP_LOGD("main", "power_consumption_hotwater_total_mWh received over can is %f", id(power_consumption_hotwater_total_mWh));}
+              else if(x[4]==0x21){
+                id(power_consumption_heating_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(power_consumption_heating_total_mWh_updated)=true;
+                ESP_LOGD("main", "power_consumption_heating_total_mWh received over can is %f", id(power_consumption_heating_total_mWh));}
+            }
+
+
+    # Produced energy, MWh / kWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x23){
+                id(produced_energy_electr_heater_hotwater_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(produced_energy_electr_heater_hotwater_total_mWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_electr_heater_hotwater_day_kwh received over can is %f", id(produced_energy_electr_heater_hotwater_total_mWh));}
+              else if(x[4]==0x27){
+                id(produced_energy_electr_heater_heating_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(produced_energy_electr_heater_heating_total_mWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_electr_heater_heating_day_kwh received over can is %f", id(produced_energy_electr_heater_heating_total_mWh));}
+              else if(x[4]==0x2b){
+              id(produced_energy_hotwater_day_kwh) =float(int((x[6])+( (x[5])<<8)));
+              id(produced_energy_hotwater_day_kwh_updated)=true;
+              ESP_LOGD("main", "produced_energy_hotwater_day_kwh received over can is %f", id(produced_energy_hotwater_day_kwh));}
+              else if(x[4]==0x2d){
+              id(produced_energy_hotwater_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+              id(produced_energy_hotwater_total_mWh_updated)=true;
+              ESP_LOGD("main", "produced_energy_hotwater_total_mWh received over can is %f", id(produced_energy_hotwater_total_mWh));}
+              else if(x[4]==0x2f){
+                id(produced_energy_heating_day_kwh) =float(int((x[6])+( (x[5])<<8)));
+                id(produced_energy_heating_day_kwh_updated)=true;
+                ESP_LOGD("main", "produced_energy_heating_day_kwh received over can is %f", id(produced_energy_heating_day_kwh));}
+              else if(x[4]==0x31){
+                id(produced_energy_heating_total_mWh) =float(int((x[6])+( (x[5])<<8)));
+                id(produced_energy_heating_total_mWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_heating_total_kWh received over can is %f", id(produced_energy_heating_total_mWh));}
+            }
+
+
+    # Produced energy, Wh / kWH
+    - can_id: 0x180
+      then:
+        - lambda: |-
+            if(x[0]==0xd2 and x[1]==0x00 and x[2]==0xfa and x[3]==0x09) {
+              if(x[4]==0x22){
+                id(produced_energy_electr_heater_hotwater_total_kWh) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(produced_energy_electr_heater_hotwater_total_kWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_electr_heater_hotwater_day_wh received over can is %f", id(produced_energy_electr_heater_hotwater_total_kWh));}
+              else if(x[4]==0x26){
+                id(produced_energy_electr_heater_heating_total_kWh) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(produced_energy_electr_heater_heating_total_kWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_electr_heater_heating_day_wh received over can is %f", id(produced_energy_electr_heater_heating_total_kWh));}
+              else if(x[4]==0x2a){
+              id(produced_energy_hotwater_day_wh) =float(int((x[6])+( (x[5])<<8)))/1000;
+              id(produced_energy_hotwater_day_wh_updated)=true;
+              ESP_LOGD("main", "produced_energy_hotwater_day_wh received over can is %f", id(produced_energy_hotwater_day_wh));}
+              else if(x[4]==0x2c){
+              id(produced_energy_hotwater_total_kWh) =float(int((x[6])+( (x[5])<<8)))/1000;
+              id(produced_energy_hotwater_total_kWh_updated)=true;
+              ESP_LOGD("main", "produced_energy_hotwater_total_kWh received over can is %f", id(produced_energy_hotwater_total_kWh));}
+              else if(x[4]==0x2e){
+                id(produced_energy_heating_day_wh) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(produced_energy_heating_day_wh_updated)=true;
+                ESP_LOGD("main", "produced_energy_heating_day_wh received over can is %f", id(produced_energy_heating_day_wh));}
+              else if(x[4]==0x30){
+                id(produced_energy_heating_total_kWh) =float(int((x[6])+( (x[5])<<8)))/1000;
+                id(produced_energy_heating_total_kWh_updated)=true;
+                ESP_LOGD("main", "produced_energy_heating_total_kWh received over can is %f", id(produced_energy_heating_total_kWh));}
+            }
+
+
+    # Show data in raw form as hex-values
+    - can_id: 0x180
+      then:
+        - lambda: |-
+              int value0 = int(x[0]);
+              int value1 =int(x[1]);
+              int value2 =int(x[2]);
+              int value3 =int(x[3]);
+              int value4 =int(x[4]);
+              int value5 =int(x[5]);
+              int value6 =int(x[6]);
+              float value7 = float(int((x[6])+( (x[5])<<8)));
+              ESP_LOGD("main", "Answer from address 180 Hex: %x %x %x %x %x %x %x", value0, value1, value2, value3, value4, value5, value6);
+              ESP_LOGD("main", "Answer from address 180 Float: %f", value7);
+              ESP_LOGD("main", "Answer from address 180 Dez.: %i %i", value5, value6);
